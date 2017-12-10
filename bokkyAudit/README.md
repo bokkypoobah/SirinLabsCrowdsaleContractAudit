@@ -11,6 +11,12 @@ Status: Work in progress
 Commits
 [cef6e55](https://github.com/sirin-labs/crowdsale-smart-contract/commit/cef6e5535d5460b46e9bd5da9433d6c80c50f3bf).
 
+### Note
+
+* The token contract is built to fit into the Bancor smart contracts, and as such have the following functions defined:
+  `disableTransfers(...)`, `issue(...)` and `destroy()`. The token contract owner can theoretically disable the transfer
+  of tokens, mint new tokens and burn any account's tokens
+
 <br />
 
 <hr />
@@ -46,10 +52,22 @@ Commits
 
 ## Code Review
 
+### contracts/math
+
+* [x] [code-review/SafeMath.md](code-review/SafeMath.md)
+  * [x] library SafeMath
+
+### contracts/ownership
+
+* [x] [code-review/Ownable.md](code-review/Ownable.md)
+  * [x] contract Ownable
+* [x] [code-review/Claimable.md](code-review/Claimable.md)
+  * [x] contract Claimable is Ownable
+
 ### contracts/bancor
 
-* [ ] [code-review/ISmartToken.md](code-review/ISmartToken.md)
-  * [ ] contract ISmartToken
+* [x] [code-review/ISmartToken.md](code-review/ISmartToken.md)
+  * [x] contract ISmartToken
 * [ ] [code-review/LimitedTransferBancorSmartToken.md](code-review/LimitedTransferBancorSmartToken.md)
   * [ ] contract LimitedTransferBancorSmartToken is MintableToken, ISmartToken, LimitedTransferToken
 
@@ -61,18 +79,6 @@ Commits
   * [ ] contract FinalizableCrowdsale is Crowdsale, Claimable
 * [ ] [code-review/RefundVault.md](code-review/RefundVault.md)
   * [ ] contract RefundVault is Claimable
-
-### contracts/math
-
-* [ ] [code-review/SafeMath.md](code-review/SafeMath.md)
-  * [ ] library SafeMath
-
-### contracts/ownership
-
-* [ ] [code-review/Claimable.md](code-review/Claimable.md)
-  * [ ] contract Claimable is Ownable
-* [ ] [code-review/Ownable.md](code-review/Ownable.md)
-  * [ ] contract Ownable
 
 ### contracts/token
 
