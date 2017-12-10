@@ -11,3 +11,11 @@ Unified.sol
 .idea/*
 node*
 output/
+
+.project
+.settings
+bokkyAudit/test/testchain/geth
+bokkyAudit/test/testchain/geth.ipc
+bokkyAudit/test/testchain/history
+bokkyAudit/test/contracts
+private
