@@ -25,7 +25,7 @@ contract RefundVault is Claimable {
     // =================================================================================================================
 
     // Refund time frame
-    uint256 public constant REFUND_TIME_FRAME = 60 days;
+    uint256 public constant REFUND_TIME_FRAME = 90 seconds;
 
     mapping (address => uint256) public depositedETH;
     mapping (address => uint256) public depositedToken;

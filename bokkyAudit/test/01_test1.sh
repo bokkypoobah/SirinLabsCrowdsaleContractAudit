@@ -58,6 +58,7 @@ printf "END_DATE           = '$END_DATE' '$END_DATE_S'\n" | tee -a $TEST1OUTPUT
 # --- Modify parameters ---
 #`perl -pi -e "s/START_DATE \= 1512921600;.*$/START_DATE \= $START_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
 `perl -pi -e "s/\.\.\///" crowdsale/$REFUNDVAULTSOL`
+`perl -pi -e "s/REFUND_TIME_FRAME \= 60 days/REFUND_TIME_FRAME \= 90 seconds/" crowdsale/$REFUNDVAULTSOL`
 
 DIFFS1=`diff $SOURCEDIR/$TOKENSOL $TOKENSOL`
 echo "--- Differences $SOURCEDIR/$TOKENSOL $TOKENSOL ---" | tee -a $TEST1OUTPUT
@@ -234,19 +235,15 @@ var sendContribution1Message = "Send Contribution #1";
 console.log("RESULT: " + sendContribution1Message);
 var sendContribution1_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
 var sendContribution1_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
-var sendContribution1_3Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
-var sendContribution1_4Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
-// var sendContribution1_1Tx = crowdsale.buyTokensWithGuarantee({from: account3, gas: 400000, value: web3.toWei("10", "ether")});
-// var sendContribution1_2Tx = crowdsale.buyTokensWithGuarantee({from: account4, gas: 400000, value: web3.toWei("10", "ether")});
-// var sendContribution1_3Tx = crowdsale.buyTokensWithGuarantee({from: account5, gas: 400000, value: web3.toWei("10", "ether")});
-// var sendContribution1_4Tx = crowdsale.buyTokensWithGuarantee({from: account6, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_3Tx = crowdsale.buyTokensWithGuarantee({from: account5, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_4Tx = crowdsale.buyTokensWithGuarantee({from: account6, gas: 400000, value: web3.toWei("10", "ether")});
 while (txpool.status.pending > 0) {
 }
 printBalances();
 failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac3 10 ETH");
 failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac4 10 ETH");
-failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 10 ETH");
-failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 10 ETH");
+failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 buyTokensWithGuarantee 10 ETH");
+failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 buyTokensWithGuarantee 10 ETH");
 printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
 printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
 printTxData("sendContribution1_3Tx", sendContribution1_3Tx);
@@ -263,7 +260,7 @@ waitUntil("END_DATE", $END_DATE, 0);
 // -----------------------------------------------------------------------------
 var finalise_Message = "Finalise Crowdsale";
 // -----------------------------------------------------------------------------
-console.log("RESULT: " + finalise_Message);
+console.log("RESULT: --- " + finalise_Message + " ---");
 var finalise_1Tx = crowdsale.finalize({from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
@@ -271,15 +268,74 @@ var finalise_2Tx = token.claimOwnership({from: contractOwnerAccount, gas: 100000
 var finalise_3Tx = refundVault.claimOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
+var finalise_4Tx = refundVault.enableRefunds({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
 printBalances();
 failIfTxStatusError(finalise_1Tx, finalise_Message + " - crowdsale.finalize()");
-failIfTxStatusError(finalise_1Tx, finalise_Message + " - token.claimOwnership()");
-failIfTxStatusError(finalise_1Tx, finalise_Message + " - refundVault.claimOwnership()");
+failIfTxStatusError(finalise_2Tx, finalise_Message + " - token.claimOwnership()");
+failIfTxStatusError(finalise_3Tx, finalise_Message + " - refundVault.claimOwnership()");
+failIfTxStatusError(finalise_4Tx, finalise_Message + " - refundVault.enableRefunds()");
 printTxData("finalise_1Tx", finalise_1Tx);
-printTxData("finalise_1Tx", finalise_1Tx);
-printTxData("finalise_1Tx", finalise_1Tx);
+printTxData("finalise_2Tx", finalise_2Tx);
+printTxData("finalise_3Tx", finalise_3Tx);
+printTxData("finalise_4Tx", finalise_4Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
+printRefundVaultContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var moveTokenMessage = "Move Tokens After Transfers Allowed";
+// -----------------------------------------------------------------------------
+console.log("RESULT: -- " + moveTokenMessage + " ---");
+var moveToken1Tx = token.transfer(account7, "100000000000000000000", {from: account3, gas: 100000});
+var moveToken2Tx = token.approve(account8,  "30000000000000000000", {from: account4, gas: 100000});
+while (txpool.status.pending > 0) {
+}
+var moveToken3Tx = token.transferFrom(account4, account9, "30000000000000000000", {from: account8, gas: 100000});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(moveToken1Tx, moveTokenMessage + " - transfer 100 token ac3 -> ac7. CHECK for movement");
+failIfTxStatusError(moveToken2Tx, moveTokenMessage + " - approve 30 tokens ac4 -> ac8");
+failIfTxStatusError(moveToken3Tx, moveTokenMessage + " - transferFrom 30 tokens ac4 -> ac9 by ac8. CHECK for movement");
+printTxData("moveToken1Tx", moveToken1Tx);
+printTxData("moveToken2Tx", moveToken2Tx);
+printTxData("moveToken3Tx", moveToken3Tx);
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var claimRefundMessage = "Claim Refund";
+// -----------------------------------------------------------------------------
+console.log("RESULT: -- " + claimRefundMessage + " ---");
+var claimRefund1Tx = refundVault.refundETH("1000000000000000000", {from: account5, gas: 100000});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(claimRefund1Tx, claimRefundMessage + " - ac5 refundVault.refundETH(1 eth)");
+printTxData("claimRefund1Tx", claimRefund1Tx);
+printTokenContractDetails();
+printRefundVaultContractDetails();
+console.log("RESULT: ");
+
+
+waitUntil("refundStartTime + 90 + 5 seconds", refundVault.refundStartTime(), 95);
+
+
+// -----------------------------------------------------------------------------
+var closeRefundVault_Message = "Close RefundVault";
+// -----------------------------------------------------------------------------
+console.log("RESULT: --- " + closeRefundVault_Message + " ---");
+var closeRefundVault_1Tx = refundVault.close({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(closeRefundVault_1Tx, closeRefundVault_Message + " - refundVault.close()");
+printTxData("closeRefundVault_1Tx", closeRefundVault_1Tx);
 printRefundVaultContractDetails();
 console.log("RESULT: ");
 
