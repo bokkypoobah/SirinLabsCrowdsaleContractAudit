@@ -1,0 +1,267 @@
+MODE               = 'test'
+GETHATTACHPOINT    = 'ipc:./testchain/geth.ipc'
+PASSWORD           = 'testtest'
+SOURCEDIR          = '../../contracts'
+TOKENSOL           = 'SirinSmartToken.sol'
+TOKENJS            = 'SirinSmartToken.js'
+CROWDSALESOL       = 'SirinCrowdsale.sol'
+CROWDSALEJS        = 'SirinCrowdsale.js'
+DEPLOYMENTDATA     = 'deploymentData.txt'
+INCLUDEJS          = './include.js'
+TEST1OUTPUT        = 'test1output.txt'
+TEST1RESULTS       = 'test1results.txt'
+CURRENTTIME        = '1512954935' 'Mon 11 Dec 2017 01:15:35 UTC'
+START_DATE         = '1512955085' 'Mon 11 Dec 2017 01:18:05 UTC'
+END_DATE           = '1512955175' 'Mon 11 Dec 2017 01:19:35 UTC'
+--- Differences ../../contracts/SirinSmartToken.sol SirinSmartToken.sol ---
+
+--- Differences ../../contracts/SirinCrowdsale.sol SirinCrowdsale.sol ---
+
+solc, the solidity compiler commandline interface
+Version: 0.4.18+commit.9cf6e910.Darwin.appleclang
+Welcome to the Geth JavaScript console!
+
+instance: Geth/v1.7.3-stable-4bb3c89d/darwin-amd64/go1.9.2
+coinbase: 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e
+at block: 794 (Mon, 11 Dec 2017 12:15:29 AEDT)
+ datadir: /Users/bok/Projects/SirinLabsCrowdsaleContractAudit/bokkyAudit/test/testchain
+ modules: admin:1.0 debug:1.0 eth:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+
+> 
+true
+> 
+true
+> 
+true
+> 
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+> 
+undefined
+> 
+RESULT:  # Account                                             EtherBalanceChange                          Token Name
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       12.000000000000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433        0.000000000000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
+RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
+RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
+RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Crowdsale Wallet
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - Team Wallet
+RESULT: 12 0xacca534c9f62ab495bd986e002ddf0f054caae4f        0.000000000000000000           0.000000000000000000 Account #12 - OEM Wallet
+RESULT: 13 0xadda9b762a00ff12711113bfdc36958b73d7f915        0.000000000000000000           0.000000000000000000 Account #13 - Bounties Wallet
+RESULT: 14 0xaeea63b5479b50f79583ec49dacdcf86ddeff392        0.000000000000000000           0.000000000000000000 Account #14 - Reserve Wallet
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:                                                                                     0.000000000000000000 Total Token Balances
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT: 
+undefined
+> 
+RESULT: 
+undefined
+> 
+> 
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+RESULT: --- Deploy Token ---
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+... 
+...... 
+......... 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+......... 
+...... 
+... 
+undefined
+> 
+... 
+undefined
+> 
+DATA: tokenAddress=0xf073db038c467b3cc774fbd95fb4fafa37caa90e
+RESULT:  # Account                                             EtherBalanceChange                          Token Name
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       18.014232086000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.014232086000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
+RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
+RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
+RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Crowdsale Wallet
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - Team Wallet
+RESULT: 12 0xacca534c9f62ab495bd986e002ddf0f054caae4f        0.000000000000000000           0.000000000000000000 Account #12 - OEM Wallet
+RESULT: 13 0xadda9b762a00ff12711113bfdc36958b73d7f915        0.000000000000000000           0.000000000000000000 Account #13 - Bounties Wallet
+RESULT: 14 0xaeea63b5479b50f79583ec49dacdcf86ddeff392        0.000000000000000000           0.000000000000000000 Account #14 - Reserve Wallet
+RESULT: 15 0xf073db038c467b3cc774fbd95fb4fafa37caa90e        0.000000000000000000           0.000000000000000000 Token 'SRN' 'SIRIN'
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:                                                                                     0.000000000000000000 Total Token Balances
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT: 
+undefined
+> 
+RESULT: PASS Deploy Token
+1
+> 
+RESULT: tokenTx status=0x1 Success gas=6000000 gasUsed=1293826 costETH=0.014232086 costUSD=6.36273868802 @ ETH/USD=447.07 gasPrice=11 gwei block=800 txIx=0 txId=0x592fbbea0ede9f2aa653ad04e980e0de7fe7dadeed0fb669cc4be9d37de0eb83 @ 1512954952 Mon, 11 Dec 2017 01:15:52 UTC
+undefined
+> 
+RESULT: tokenContractAddress=0xf073db038c467b3cc774fbd95fb4fafa37caa90e
+RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
+RESULT: token.pendingOwner=0x0000000000000000000000000000000000000000
+RESULT: token.symbol=SRN
+RESULT: token.name=SIRIN
+RESULT: token.decimals=18
+RESULT: token.totalSupply=0
+RESULT: token.destroyEnabled=false
+RESULT: token.mintingFinished=false
+RESULT: token.transfersEnabled=false
+RESULT: NewSmartToken 0 #800 {"_token":"0xf073db038c467b3cc774fbd95fb4fafa37caa90e"}
+undefined
+> 
+RESULT: 
+undefined
+> 
+> 
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+RESULT: --- Deploy Crowdsale Contract ---
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+... 
+...... 
+......... 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+............ 
+......... 
+...... 
+... 
+undefined
+> 
+... 
+undefined
+> 
+DATA: crowdsaleAddress=0x5b7fb35f3f70a189e940bce616b67d870f600d35
+RESULT:  # Account                                             EtherBalanceChange                          Token Name
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       27.035380950000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.035380950000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
+RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
+RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
+RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Crowdsale Wallet
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - Team Wallet
+RESULT: 12 0xacca534c9f62ab495bd986e002ddf0f054caae4f        0.000000000000000000           0.000000000000000000 Account #12 - OEM Wallet
+RESULT: 13 0xadda9b762a00ff12711113bfdc36958b73d7f915        0.000000000000000000           0.000000000000000000 Account #13 - Bounties Wallet
+RESULT: 14 0xaeea63b5479b50f79583ec49dacdcf86ddeff392        0.000000000000000000           0.000000000000000000 Account #14 - Reserve Wallet
+RESULT: 15 0xf073db038c467b3cc774fbd95fb4fafa37caa90e        0.000000000000000000           0.000000000000000000 Token 'SRN' 'SIRIN'
+RESULT: 16 0x5b7fb35f3f70a189e940bce616b67d870f600d35        0.000000000000000000           0.000000000000000000 Crowdsale
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:                                                                                     0.000000000000000000 Total Token Balances
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT: 
+undefined
+> 
+RESULT: PASS Deploy Crowdsale Contract
+1
+> 
+RESULT: crowdsaleAddress=0x5b7fb35f3f70a189e940bce616b67d870f600d35 status=0x1 Success gas=6000000 gasUsed=1922624 costETH=0.021148864 costUSD=9.45502262848 @ ETH/USD=447.07 gasPrice=11 gwei block=803 txIx=0 txId=0x2653864ee3dc56258e2a1cf9c4d93f13c7edd35cf19f491cc4643bc7dc58e77f @ 1512954955 Mon, 11 Dec 2017 01:15:55 UTC
+undefined
+> 
+RESULT: crowdsaleContractAddress=0x5b7fb35f3f70a189e940bce616b67d870f600d35
+RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
+RESULT: crowdsale.pendingOwner=0x0000000000000000000000000000000000000000
+RESULT: crowdsale.isFinalized=false
+RESULT: crowdsale.token=0xf073db038c467b3cc774fbd95fb4fafa37caa90e
+RESULT: crowdsale.startTime=1512955085 Mon, 11 Dec 2017 01:18:05 UTC
+RESULT: crowdsale.endTime=1512955175 Mon, 11 Dec 2017 01:19:35 UTC
+RESULT: crowdsale.wallet=0xaaaa9de1e6c564446ebca0fd102d8bd92093c756
+RESULT: crowdsale.rate=500
+RESULT: crowdsale.weiRaised=0 0 ETH
+RESULT: crowdsale.MAX_TOKEN_GRANTEES=10
+RESULT: crowdsale.EXCHANGE_RATE=500
+RESULT: crowdsale.REFUND_DIVISION_RATE=2
+RESULT: crowdsale.walletTeam=0xabba43e7594e3b76afb157989e93c6621497fd4b
+RESULT: crowdsale.walletOEM=0xacca534c9f62ab495bd986e002ddf0f054caae4f
+RESULT: crowdsale.walletBounties=0xadda9b762a00ff12711113bfdc36958b73d7f915
+RESULT: crowdsale.walletReserve=0xaeea63b5479b50f79583ec49dacdcf86ddeff392
+RESULT: crowdsale.fiatRaisedConvertedToWei=0
+RESULT: crowdsale.refundVault=0xa55a151eb00fded1634d27d1127b4be4627079ea
+undefined
+> 
+RESULT: 
+undefined
+> 
+> 

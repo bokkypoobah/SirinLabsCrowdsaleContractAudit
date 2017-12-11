@@ -110,3 +110,20 @@ The following is outside the scope of this review, but will be checked against e
 The following was not audited as it is part of the testing framework:
 
 * [../contracts/Migrations.sol](../contracts/Migrations.sol)
+
+<br />
+
+### Compiler Warnings
+
+```
+Version: 0.4.18+commit.9cf6e910.Darwin.appleclang
+token/LimitedTransferToken.sol:54:47: Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+  function transferableTokens(address holder, uint64 time) public view returns (uint256) {
+                                              ^---------^
+token/LimitedTransferToken.sol:54:47: Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+  function transferableTokens(address holder, uint64 time) public view returns (uint256) {
+                                              ^---------^
+crowdsale/FinalizableCrowdsale.sol:38:3: Warning: Function state mutability can be restricted to pure
+  function finalization() internal {
+  ^
+```

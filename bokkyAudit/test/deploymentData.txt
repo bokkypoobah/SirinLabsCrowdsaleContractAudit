@@ -1,0 +1,2 @@
+tokenAddress=0xf073db038c467b3cc774fbd95fb4fafa37caa90e
+crowdsaleAddress=0x5b7fb35f3f70a189e940bce616b67d870f600d35
