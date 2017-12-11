@@ -424,169 +424,82 @@ function printCrowdsaleContractDetails() {
 
 
 // -----------------------------------------------------------------------------
-// TokenFactory Contract
+// RefundVault Contract
 // -----------------------------------------------------------------------------
-var tokenFactoryContractAddress = null;
-var tokenFactoryContractAbi = null;
+var refundVaultContractAddress = null;
+var refundVaultContractAbi = null;
 
-function addTokenFactoryContractAddressAndAbi(address, tokenFactoryAbi) {
-  tokenFactoryContractAddress = address;
-  tokenFactoryContractAbi = tokenFactoryAbi;
+function addRefundVaultContractAddressAndAbi(address, refundVaultAbi) {
+  refundVaultContractAddress = address;
+  refundVaultContractAbi = refundVaultAbi;
 }
 
-var tokenFactoryFromBlock = 0;
-
-function getBTTSFactoryTokenListing() {
-  var addresses = [];
-  console.log("RESULT: tokenFactoryContractAddress=" + tokenFactoryContractAddress);
-  if (tokenFactoryContractAddress != null && tokenFactoryContractAbi != null) {
-    var contract = eth.contract(tokenFactoryContractAbi).at(tokenFactoryContractAddress);
+var refundVaultFromBlock = 0;
+function printRefundVaultContractDetails() {
+  console.log("RESULT: refundVaultContractAddress=" + refundVaultContractAddress);
+  if (refundVaultContractAddress != null && refundVaultContractAbi != null) {
+    var contract = eth.contract(refundVaultContractAbi).at(refundVaultContractAddress);
+    console.log("RESULT: refundVault.owner=" + contract.owner());
+    console.log("RESULT: refundVault.pendingOwner=" + contract.pendingOwner());
+    console.log("RESULT: refundVault.REFUND_TIME_FRAME=" + contract.REFUND_TIME_FRAME() );
+    console.log("RESULT: refundVault.etherWallet=" + contract.etherWallet());
+    console.log("RESULT: refundVault.token=" + contract.token());
+    console.log("RESULT: refundVault.state=" + contract.state());
+    console.log("RESULT: refundVault.refundStartTime=" + contract.refundStartTime() + " " + new Date(contract.refundStartTime() * 1000).toUTCString());
 
     var latestBlock = eth.blockNumber;
     var i;
 
-    var bttsTokenListingEvents = contract.BTTSTokenListing({}, { fromBlock: tokenFactoryFromBlock, toBlock: latestBlock });
-    i = 0;
-    bttsTokenListingEvents.watch(function (error, result) {
-      console.log("RESULT: get BTTSTokenListing " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-      addresses.push(result.args.bttsTokenAddress);
-    });
-    bttsTokenListingEvents.stopWatching();
-  }
-  return addresses;
-}
-
-function printTokenFactoryContractDetails() {
-  console.log("RESULT: tokenFactoryContractAddress=" + tokenFactoryContractAddress);
-  if (tokenFactoryContractAddress != null && tokenFactoryContractAbi != null) {
-    var contract = eth.contract(tokenFactoryContractAbi).at(tokenFactoryContractAddress);
-    console.log("RESULT: tokenFactory.owner=" + contract.owner());
-    console.log("RESULT: tokenFactory.newOwner=" + contract.newOwner());
-
-    var latestBlock = eth.blockNumber;
-    var i;
-
-    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: tokenFactoryFromBlock, toBlock: latestBlock });
+    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
     i = 0;
     ownershipTransferredEvents.watch(function (error, result) {
       console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     ownershipTransferredEvents.stopWatching();
 
-    var bttsTokenListingEvents = contract.BTTSTokenListing({}, { fromBlock: tokenFactoryFromBlock, toBlock: latestBlock });
+    var activeEvents = contract.Active({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
     i = 0;
-    bttsTokenListingEvents.watch(function (error, result) {
-      console.log("RESULT: BTTSTokenListing " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    activeEvents.watch(function (error, result) {
+      console.log("RESULT: Active " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
-    bttsTokenListingEvents.stopWatching();
+    activeEvents.stopWatching();
 
-    tokenFactoryFromBlock = latestBlock + 1;
+    var closedEvents = contract.Closed({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
+    i = 0;
+    closedEvents.watch(function (error, result) {
+      console.log("RESULT: Closed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    closedEvents.stopWatching();
+
+    var depositEvents = contract.Deposit({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
+    i = 0;
+    depositEvents.watch(function (error, result) {
+      console.log("RESULT: Deposit " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    depositEvents.stopWatching();
+
+    var refundsEnabledEvents = contract.RefundsEnabled({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
+    i = 0;
+    refundsEnabledEvents.watch(function (error, result) {
+      console.log("RESULT: RefundsEnabled " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    refundsEnabledEvents.stopWatching();
+
+    var refundedETHEvents = contract.RefundedETH({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
+    i = 0;
+    refundedETHEvents.watch(function (error, result) {
+      console.log("RESULT: RefundedETH " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    refundedETHEvents.stopWatching();
+
+    var tokensClaimedEvents = contract.TokensClaimed({}, { fromBlock: refundVaultFromBlock, toBlock: latestBlock });
+    i = 0;
+    tokensClaimedEvents.watch(function (error, result) {
+      console.log("RESULT: TokensClaimed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    tokensClaimedEvents.stopWatching();
+
+    refundVaultFromBlock = latestBlock + 1;
   }
 }
 
-
-// -----------------------------------------------------------------------------
-// BonusList Contract
-// -----------------------------------------------------------------------------
-var bonusListContractAddress = null;
-var bonusListContractAbi = null;
-
-function addBonusListContractAddressAndAbi(address, bonusListAbi) {
-  bonusListContractAddress = address;
-  bonusListContractAbi = bonusListAbi;
-}
-
-var bonusListFromBlock = 0;
-function printBonusListContractDetails() {
-  console.log("RESULT: bonusListContractAddress=" + bonusListContractAddress);
-  if (bonusListContractAddress != null && bonusListContractAbi != null) {
-    var contract = eth.contract(bonusListContractAbi).at(bonusListContractAddress);
-    console.log("RESULT: bonusList.owner=" + contract.owner());
-    console.log("RESULT: bonusList.newOwner=" + contract.newOwner());
-    console.log("RESULT: bonusList.sealed=" + contract.sealed());
-
-    var latestBlock = eth.blockNumber;
-    var i;
-
-    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
-    i = 0;
-    ownershipTransferredEvents.watch(function (error, result) {
-      console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    ownershipTransferredEvents.stopWatching();
-
-    var adminAddedEvents = contract.AdminAdded({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
-    i = 0;
-    adminAddedEvents.watch(function (error, result) {
-      console.log("RESULT: AdminAdded " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    adminAddedEvents.stopWatching();
-
-    var adminRemovedEvents = contract.AdminRemoved({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
-    i = 0;
-    adminRemovedEvents.watch(function (error, result) {
-      console.log("RESULT: AdminRemoved " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    adminRemovedEvents.stopWatching();
-
-    var addressListedEvents = contract.AddressListed({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
-    i = 0;
-    addressListedEvents.watch(function (error, result) {
-      console.log("RESULT: AddressListed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    addressListedEvents.stopWatching();
-
-    bonusListFromBlock = latestBlock + 1;
-  }
-}
-
-
-// -----------------------------------------------------------------------------
-// Generate Summary JSON
-// -----------------------------------------------------------------------------
-function generateSummaryJSON() {
-  console.log("JSONSUMMARY: {");
-  if (crowdsaleContractAddress != null && crowdsaleContractAbi != null) {
-    var contract = eth.contract(crowdsaleContractAbi).at(crowdsaleContractAddress);
-    var blockNumber = eth.blockNumber;
-    var timestamp = eth.getBlock(blockNumber).timestamp;
-    console.log("JSONSUMMARY:   \"blockNumber\": " + blockNumber + ",");
-    console.log("JSONSUMMARY:   \"blockTimestamp\": " + timestamp + ",");
-    console.log("JSONSUMMARY:   \"blockTimestampString\": \"" + new Date(timestamp * 1000).toUTCString() + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleContractAddress\": \"" + crowdsaleContractAddress + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleContractOwnerAddress\": \"" + contract.owner() + "\",");
-    console.log("JSONSUMMARY:   \"tokenContractAddress\": \"" + contract.bttsToken() + "\",");
-    console.log("JSONSUMMARY:   \"tokenContractDecimals\": " + contract.TOKEN_DECIMALS() + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleWalletAddress\": \"" + contract.wallet() + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleTeamWalletAddress\": \"" + contract.teamWallet() + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleTeamPercent\": " + contract.TEAM_PERCENT_GZE() + ",");
-    console.log("JSONSUMMARY:   \"bonusListContractAddress\": \"" + contract.bonusList() + "\",");
-    console.log("JSONSUMMARY:   \"tier1Bonus\": " + contract.TIER1_BONUS() + ",");
-    console.log("JSONSUMMARY:   \"tier2Bonus\": " + contract.TIER2_BONUS() + ",");
-    console.log("JSONSUMMARY:   \"tier3Bonus\": " + contract.TIER3_BONUS() + ",");
-    var startDate = contract.START_DATE();
-    // BK TODO - Remove for production
-    startDate = 1512921600;
-    var endDate = contract.endDate();
-    // BK TODO - Remove for production
-    endDate = 1513872000;
-    console.log("JSONSUMMARY:   \"crowdsaleStart\": " + startDate + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(startDate * 1000).toUTCString() + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleEnd\": " + endDate + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(endDate * 1000).toUTCString() + "\",");
-    console.log("JSONSUMMARY:   \"usdPerEther\": " + contract.usdPerKEther().shift(-3) + ",");
-    console.log("JSONSUMMARY:   \"usdPerGze\": " + contract.USD_CENT_PER_GZE().shift(-2) + ",");
-    console.log("JSONSUMMARY:   \"gzePerEth\": " + contract.gzePerEth().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"capInUsd\": " + contract.CAP_USD() + ",");
-    console.log("JSONSUMMARY:   \"capInEth\": " + contract.capEth().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"minimumContributionEth\": " + contract.MIN_CONTRIBUTION_ETH().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"contributedEth\": " + contract.contributedEth().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"contributedUsd\": " + contract.contributedUsd() + ",");
-    console.log("JSONSUMMARY:   \"generatedGze\": " + contract.generatedGze().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"lockedAccountThresholdUsd\": " + contract.lockedAccountThresholdUsd() + ",");
-    console.log("JSONSUMMARY:   \"lockedAccountThresholdEth\": " + contract.lockedAccountThresholdEth().shift(-18) + ",");
-    console.log("JSONSUMMARY:   \"precommitmentAdjusted\": " + contract.precommitmentAdjusted() + ",");
-    console.log("JSONSUMMARY:   \"finalised\": " + contract.finalised());
-  }
-  console.log("JSONSUMMARY: }");
-}

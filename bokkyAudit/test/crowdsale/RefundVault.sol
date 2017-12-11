@@ -1,9 +1,9 @@
 pragma solidity ^0.4.18;
 
-import '../math/SafeMath.sol';
-import '../ownership/Claimable.sol';
-import '../token/ERC20.sol';
-import '../SirinSmartToken.sol';
+import 'math/SafeMath.sol';
+import 'ownership/Claimable.sol';
+import 'token/ERC20.sol';
+import 'SirinSmartToken.sol';
 
 /**
  * @title RefundVault

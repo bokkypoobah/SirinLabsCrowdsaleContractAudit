@@ -16,6 +16,8 @@ TOKENSOL=`grep ^TOKENSOL= settings.txt | sed "s/^.*=//"`
 TOKENJS=`grep ^TOKENJS= settings.txt | sed "s/^.*=//"`
 CROWDSALESOL=`grep ^CROWDSALESOL= settings.txt | sed "s/^.*=//"`
 CROWDSALEJS=`grep ^CROWDSALEJS= settings.txt | sed "s/^.*=//"`
+REFUNDVAULTSOL=`grep ^REFUNDVAULTSOL= settings.txt | sed "s/^.*=//"`
+REFUNDVAULTJS=`grep ^REFUNDVAULTJS= settings.txt | sed "s/^.*=//"`
 
 DEPLOYMENTDATA=`grep ^DEPLOYMENTDATA= settings.txt | sed "s/^.*=//"`
 
@@ -26,7 +28,7 @@ TEST1RESULTS=`grep ^TEST1RESULTS= settings.txt | sed "s/^.*=//"`
 CURRENTTIME=`date +%s`
 CURRENTTIMES=`date -r $CURRENTTIME -u`
 
-START_DATE=`echo "$CURRENTTIME+60*2+30" | bc`
+START_DATE=`echo "$CURRENTTIME+90" | bc`
 START_DATE_S=`date -r $START_DATE -u`
 END_DATE=`echo "$CURRENTTIME+60*4" | bc`
 END_DATE_S=`date -r $END_DATE -u`
@@ -39,6 +41,8 @@ printf "TOKENSOL           = '$TOKENSOL'\n" | tee -a $TEST1OUTPUT
 printf "TOKENJS            = '$TOKENJS'\n" | tee -a $TEST1OUTPUT
 printf "CROWDSALESOL       = '$CROWDSALESOL'\n" | tee -a $TEST1OUTPUT
 printf "CROWDSALEJS        = '$CROWDSALEJS'\n" | tee -a $TEST1OUTPUT
+printf "REFUNDVAULTSOL     = '$REFUNDVAULTSOL'\n" | tee -a $TEST1OUTPUT
+printf "REFUNDVAULTJS      = '$REFUNDVAULTJS'\n" | tee -a $TEST1OUTPUT
 printf "DEPLOYMENTDATA     = '$DEPLOYMENTDATA'\n" | tee -a $TEST1OUTPUT
 printf "INCLUDEJS          = '$INCLUDEJS'\n" | tee -a $TEST1OUTPUT
 printf "TEST1OUTPUT        = '$TEST1OUTPUT'\n" | tee -a $TEST1OUTPUT
@@ -53,7 +57,7 @@ printf "END_DATE           = '$END_DATE' '$END_DATE_S'\n" | tee -a $TEST1OUTPUT
 
 # --- Modify parameters ---
 #`perl -pi -e "s/START_DATE \= 1512921600;.*$/START_DATE \= $START_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
-#`perl -pi -e "s/endDate \= 1513872000;.*$/endDate \= $END_DATE; \/\/ $END_DATE_S/" $CROWDSALESOL`
+`perl -pi -e "s/\.\.\///" crowdsale/$REFUNDVAULTSOL`
 
 DIFFS1=`diff $SOURCEDIR/$TOKENSOL $TOKENSOL`
 echo "--- Differences $SOURCEDIR/$TOKENSOL $TOKENSOL ---" | tee -a $TEST1OUTPUT
@@ -63,25 +67,36 @@ DIFFS1=`diff $SOURCEDIR/$CROWDSALESOL $CROWDSALESOL`
 echo "--- Differences $SOURCEDIR/$CROWDSALESOL $CROWDSALESOL ---" | tee -a $TEST1OUTPUT
 echo "$DIFFS1" | tee -a $TEST1OUTPUT
 
+DIFFS1=`diff $SOURCEDIR/crowdsale/$REFUNDVAULTSOL crowdsale/$REFUNDVAULTSOL`
+echo "--- Differences $SOURCEDIR/crowdsale/$REFUNDVAULTSOL crowdsale/$REFUNDVAULTSOL ---" | tee -a $TEST1OUTPUT
+echo "$DIFFS1" | tee -a $TEST1OUTPUT
+
 solc_0.4.18 --version | tee -a $TEST1OUTPUT
 
 echo "var tokenOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $TOKENSOL`;" > $TOKENJS
 echo "var crowdsaleOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $CROWDSALESOL`;" > $CROWDSALEJS
+echo "var refundVaultOutput=`solc_0.4.18 --allow-paths . --optimize --pretty-json --combined-json abi,bin,interface crowdsale/$REFUNDVAULTSOL`;" > $REFUNDVAULTJS
 
 geth --verbosity 3 attach $GETHATTACHPOINT << EOF | tee -a $TEST1OUTPUT
 loadScript("$TOKENJS");
 loadScript("$CROWDSALEJS");
+loadScript("$REFUNDVAULTJS");
 loadScript("functions.js");
 
 var tokenAbi = JSON.parse(tokenOutput.contracts["$TOKENSOL:SirinSmartToken"].abi);
 var tokenBin = "0x" + tokenOutput.contracts["$TOKENSOL:SirinSmartToken"].bin;
 var crowdsaleAbi = JSON.parse(crowdsaleOutput.contracts["$CROWDSALESOL:SirinCrowdsale"].abi);
 var crowdsaleBin = "0x" + crowdsaleOutput.contracts["$CROWDSALESOL:SirinCrowdsale"].bin;
+var refundVaultAbi = JSON.parse(refundVaultOutput.contracts["crowdsale/$REFUNDVAULTSOL:RefundVault"].abi);
+var refundVaultBin = "0x" + refundVaultOutput.contracts["crowdsale/$REFUNDVAULTSOL:RefundVault"].bin;
 
 // console.log("DATA: tokenAbi=" + JSON.stringify(tokenAbi));
 // console.log("DATA: tokenBin=" + JSON.stringify(tokenBin));
 // console.log("DATA: crowdsaleAbi=" + JSON.stringify(crowdsaleAbi));
 // console.log("DATA: crowdsaleBin=" + JSON.stringify(crowdsaleBin));
+// console.log("DATA: refundVaultAbi=" + JSON.stringify(refundVaultAbi));
+// console.log("DATA: refundVaultBin=" + JSON.stringify(refundVaultBin));
+
 
 unlockAccounts("$PASSWORD");
 printBalances();
@@ -120,17 +135,47 @@ console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
+var deployRefundVaultMessage = "Deploy RefundVault";
+// -----------------------------------------------------------------------------
+console.log("RESULT: --- " + deployRefundVaultMessage + " ---");
+var refundVaultContract = web3.eth.contract(refundVaultAbi);
+// console.log(JSON.stringify(refundVaultAbi));
+var refundVaultTx = null;
+var refundVaultAddress = null;
+var refundVault = refundVaultContract.new(wallet, tokenAddress, {from: contractOwnerAccount, data: refundVaultBin, gas: 6000000, gasPrice: defaultGasPrice},
+  function(e, contract) {
+    if (!e) {
+      if (!contract.address) {
+        refundVaultTx = contract.transactionHash;
+      } else {
+        refundVaultAddress = contract.address;
+        addAccount(refundVaultAddress, "RefundVault");
+        addRefundVaultContractAddressAndAbi(refundVaultAddress, refundVaultAbi);
+        console.log("DATA: refundVaultAddress=" + refundVaultAddress);
+      }
+    }
+  }
+);
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(refundVaultTx, deployRefundVaultMessage);
+printTxData("refundVaultTx", refundVaultTx);
+printRefundVaultContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
 var crowdsaleMessage = "Deploy Crowdsale Contract";
 var startTime = $START_DATE;
 var endTime = $END_DATE;
-var refundVault = eth.accounts[5];
 // -----------------------------------------------------------------------------
 console.log("RESULT: --- " + crowdsaleMessage + " ---");
 var crowdsaleContract = web3.eth.contract(crowdsaleAbi);
 // console.log(JSON.stringify(crowdsaleContract));
 var crowdsaleTx = null;
 var crowdsaleAddress = null;
-var crowdsale = crowdsaleContract.new(startTime, endTime, wallet, teamWallet, oemWallet, bountiesWallet, reserveWallet, tokenAddress, refundVault, {from: contractOwnerAccount, data: crowdsaleBin, gas: 6000000, gasPrice: defaultGasPrice},
+var crowdsale = crowdsaleContract.new(startTime, endTime, wallet, teamWallet, oemWallet, bountiesWallet, reserveWallet, tokenAddress, refundVaultAddress, {from: contractOwnerAccount, data: crowdsaleBin, gas: 6000000, gasPrice: defaultGasPrice},
   function(e, contract) {
     if (!e) {
       if (!contract.address) {
@@ -151,6 +196,93 @@ failIfTxStatusError(crowdsaleTx, crowdsaleMessage);
 printTxData("crowdsaleAddress=" + crowdsaleAddress, crowdsaleTx);
 printCrowdsaleContractDetails();
 console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var setup_Message = "Setup";
+// -----------------------------------------------------------------------------
+console.log("RESULT: --- " + setup_Message + " ---");
+var setup_1Tx = token.transferOwnership(crowdsaleAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_2Tx = refundVault.transferOwnership(crowdsaleAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+var setup_3Tx = crowdsale.claimTokenOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_4Tx = crowdsale.claimRefundVaultOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(setup_1Tx, setup_Message + " - token.transferOwnership(crowdsaleAddress)");
+failIfTxStatusError(setup_2Tx, setup_Message + " - refundVault.transferOwnership(crowdsaleAddress)");
+failIfTxStatusError(setup_3Tx, setup_Message + " - crowdsale.claimTokenOwnership()");
+failIfTxStatusError(setup_4Tx, setup_Message + " - crowdsale.claimRefundVaultOwnership()");
+printTxData("setup_1Tx", setup_1Tx);
+printTxData("setup_2Tx", setup_2Tx);
+printTxData("setup_3Tx", setup_3Tx);
+printTxData("setup_4Tx", setup_4Tx);
+printCrowdsaleContractDetails();
+printRefundVaultContractDetails();
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
+waitUntil("START_DATE", $START_DATE, 0);
+
+
+// -----------------------------------------------------------------------------
+var sendContribution1Message = "Send Contribution #1";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + sendContribution1Message);
+var sendContribution1_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_3Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_4Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+// var sendContribution1_1Tx = crowdsale.buyTokensWithGuarantee({from: account3, gas: 400000, value: web3.toWei("10", "ether")});
+// var sendContribution1_2Tx = crowdsale.buyTokensWithGuarantee({from: account4, gas: 400000, value: web3.toWei("10", "ether")});
+// var sendContribution1_3Tx = crowdsale.buyTokensWithGuarantee({from: account5, gas: 400000, value: web3.toWei("10", "ether")});
+// var sendContribution1_4Tx = crowdsale.buyTokensWithGuarantee({from: account6, gas: 400000, value: web3.toWei("10", "ether")});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac3 10 ETH");
+failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac4 10 ETH");
+failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 10 ETH");
+failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 10 ETH");
+printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
+printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
+printTxData("sendContribution1_3Tx", sendContribution1_3Tx);
+printTxData("sendContribution1_4Tx", sendContribution1_4Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+printRefundVaultContractDetails();
+console.log("RESULT: ");
+
+
+waitUntil("END_DATE", $END_DATE, 0);
+
+
+// -----------------------------------------------------------------------------
+var finalise_Message = "Finalise Crowdsale";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + finalise_Message);
+var finalise_1Tx = crowdsale.finalize({from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+var finalise_2Tx = token.claimOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var finalise_3Tx = refundVault.claimOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(finalise_1Tx, finalise_Message + " - crowdsale.finalize()");
+failIfTxStatusError(finalise_1Tx, finalise_Message + " - token.claimOwnership()");
+failIfTxStatusError(finalise_1Tx, finalise_Message + " - refundVault.claimOwnership()");
+printTxData("finalise_1Tx", finalise_1Tx);
+printTxData("finalise_1Tx", finalise_1Tx);
+printTxData("finalise_1Tx", finalise_1Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+printRefundVaultContractDetails();
+console.log("RESULT: ");
+
 
 exit;
 
@@ -306,21 +438,6 @@ while (txpool.status.pending > 0) {
 printBalances();
 failIfTxStatusError(addPrecommitmentAdjustment_1Tx, addPrecommitmentAdjustment_Message + " - ac7 + 111 GZE");
 printTxData("addPrecommitmentAdjustment_1Tx", addPrecommitmentAdjustment_1Tx);
-printCrowdsaleContractDetails();
-printTokenContractDetails();
-console.log("RESULT: ");
-
-
-// -----------------------------------------------------------------------------
-var finalise_Message = "Finalise Crowdsale";
-// -----------------------------------------------------------------------------
-console.log("RESULT: " + finalise_Message);
-var finalise_1Tx = crowdsale.finalise({from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
-while (txpool.status.pending > 0) {
-}
-printBalances();
-failIfTxStatusError(finalise_1Tx, finalise_Message);
-printTxData("finalise_1Tx", finalise_1Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");

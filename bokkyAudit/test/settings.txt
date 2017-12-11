@@ -7,6 +7,8 @@ TOKENSOL=SirinSmartToken.sol
 TOKENJS=SirinSmartToken.js
 CROWDSALESOL=SirinCrowdsale.sol
 CROWDSALEJS=SirinCrowdsale.js
+REFUNDVAULTSOL=RefundVault.sol
+REFUNDVAULTJS=RefundVault.js
 
 DEPLOYMENTDATA=deploymentData.txt
 
