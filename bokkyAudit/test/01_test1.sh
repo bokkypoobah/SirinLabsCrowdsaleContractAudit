@@ -230,13 +230,14 @@ waitUntil("START_DATE", $START_DATE, 0);
 
 
 // -----------------------------------------------------------------------------
-var sendContribution1Message = "Send Contribution #1";
+var sendContribution1Message = "Send Contribution #1 & Add Grantee";
 // -----------------------------------------------------------------------------
-console.log("RESULT: " + sendContribution1Message);
+console.log("RESULT: --- " + sendContribution1Message + " ---");
 var sendContribution1_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, value: web3.toWei("10", "ether"), gas: 400000, gasPrice: defaultGasPrice});
 var sendContribution1_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, value: web3.toWei("10", "ether"), gas: 400000, gasPrice: defaultGasPrice});
 var sendContribution1_3Tx = crowdsale.buyTokensWithGuarantee({from: account5, value: web3.toWei("10", "ether"), gas: 400000, gasPrice: defaultGasPrice});
 var sendContribution1_4Tx = crowdsale.buyTokensWithGuarantee({from: account6, value: web3.toWei("10", "ether"), gas: 400000, gasPrice: defaultGasPrice});
+var addGrantee_1Tx = crowdsale.addUpdateGrantee(account2, new BigNumber(1000).shift(18), {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
 printBalances();
@@ -244,15 +245,16 @@ failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac3 10
 failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac4 10 ETH");
 failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 buyTokensWithGuarantee 10 ETH");
 failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 buyTokensWithGuarantee 10 ETH");
+failIfTxStatusError(addGrantee_1Tx, sendContribution1Message + " - addUpdateGrantee(ac2)");
 printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
 printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
 printTxData("sendContribution1_3Tx", sendContribution1_3Tx);
 printTxData("sendContribution1_4Tx", sendContribution1_4Tx);
+printTxData("addGrantee_1Tx", addGrantee_1Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 printRefundVaultContractDetails();
 console.log("RESULT: ");
-
 
 waitUntil("END_DATE", $END_DATE, 0);
 
@@ -268,18 +270,13 @@ var finalise_2Tx = token.claimOwnership({from: contractOwnerAccount, gas: 100000
 var finalise_3Tx = refundVault.claimOwnership({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
-var finalise_4Tx = refundVault.enableRefunds({from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-while (txpool.status.pending > 0) {
-}
 printBalances();
 failIfTxStatusError(finalise_1Tx, finalise_Message + " - crowdsale.finalize()");
 failIfTxStatusError(finalise_2Tx, finalise_Message + " - token.claimOwnership()");
 failIfTxStatusError(finalise_3Tx, finalise_Message + " - refundVault.claimOwnership()");
-failIfTxStatusError(finalise_4Tx, finalise_Message + " - refundVault.enableRefunds()");
 printTxData("finalise_1Tx", finalise_1Tx);
 printTxData("finalise_2Tx", finalise_2Tx);
 printTxData("finalise_3Tx", finalise_3Tx);
-printTxData("finalise_4Tx", finalise_4Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 printRefundVaultContractDetails();
@@ -341,21 +338,6 @@ console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
-var claimTokens1Message = "Claim Tokens #1";
-// -----------------------------------------------------------------------------
-console.log("RESULT: -- " + claimTokens1Message + " ---");
-var claimTokens1_1Tx = refundVault.claimAllInvestorTokensByOwner(account6, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-while (txpool.status.pending > 0) {
-}
-printBalances();
-failIfTxStatusError(claimTokens1_1Tx, claimTokens1Message + " - refundVault.claimAllInvestorTokensByOwner(account6)");
-printTxData("claimTokens1_1Tx", claimTokens1_1Tx);
-printTokenContractDetails();
-printRefundVaultContractDetails();
-console.log("RESULT: ");
-
-
-// -----------------------------------------------------------------------------
 var claimTokens2Message = "Claim Tokens #2";
 // -----------------------------------------------------------------------------
 console.log("RESULT: -- " + claimTokens2Message + " ---");
@@ -366,7 +348,7 @@ var claimTokens2_2Tx = refundVault.claimAllTokens({from: account5, gas: 100000, 
 while (txpool.status.pending > 0) {
 }
 printBalances();
-passIfTxStatusError(claimTokens2_1Tx, claimTokens2Message + " - refundVault.claimAllTokens() by ac6 - Expecting to fail as owner claimed");
+failIfTxStatusError(claimTokens2_1Tx, claimTokens2Message + " - refundVault.claimAllTokens() by ac6");
 failIfTxStatusError(claimTokens2_2Tx, claimTokens2Message + " - refundVault.claimAllTokens() by ac5");
 printTxData("claimTokens2_1Tx", claimTokens2_1Tx);
 printTxData("claimTokens2_2Tx", claimTokens2_2Tx);
