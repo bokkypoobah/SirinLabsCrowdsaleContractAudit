@@ -9,7 +9,8 @@ Status: Work in progress
 [Sirin Labs](https://sirinlabs.com/)
 
 Commits
-[cef6e55](https://github.com/sirin-labs/crowdsale-smart-contract/commit/cef6e5535d5460b46e9bd5da9433d6c80c50f3bf).
+[cef6e55](https://github.com/sirin-labs/crowdsale-smart-contract/commit/cef6e5535d5460b46e9bd5da9433d6c80c50f3bf) and
+[3f6d504](https://github.com/sirin-labs/crowdsale-smart-contract/commit/3f6d504f5ab26d908bd3968bc37749f82894411f).
 
 ### Note
 
@@ -42,6 +43,7 @@ Commits
 
 * **MEDIUM IMPORTANCE** There is a problem with `RefundVault.claimAllInvestorTokensByOwner(...)` not recording the
   tokens being claimed no behalf of an investor.
+  * [x] Resolved by removing this function in [3f6d504](https://github.com/sirin-labs/crowdsale-smart-contract/commit/3f6d504f5ab26d908bd3968bc37749f82894411f)
 
 <br />
 
@@ -82,7 +84,6 @@ Commits
   * [x] contract FinalizableCrowdsale is Crowdsale, Claimable
 * [x] [code-review/RefundVault.md](code-review/RefundVault.md)
   * [x] contract RefundVault is Claimable
-  * [ ] NOTE there is an outstanding bug that will need to be fixed
 
 ### contracts/token
 

@@ -234,25 +234,6 @@ contract RefundVault is Claimable {
         // BK Ok - Log event
         TokensClaimed(investor, tokensToClaim);
     }
-    
-    //@dev Transfer tokens from the vault to the investor while releasing proportional amount of ether
-    //to Sirin`s wallet.
-    //Can be triggerd by the owner of the vault (in our case - Sirin`s owner after 60 days)
-    // BK Ok - Can only be called by the owner on behalf of investors
-    function claimAllInvestorTokensByOwner(address investor) isCloseState onlyOwner public {
-        uint256 depositedTokenValue = depositedToken[investor];
-        require(depositedTokenValue > 0);
-        
-        // BK NOTE - Bug found in the function
-        // BK NOTE - Fixed by adding the following statement proposed by the developers
-        // BK NOTE - depositedToken[investor] = 0;
-
-        // BK Ok
-        token.transfer(investor, depositedTokenValue);
-        
-        // BK Ok - Log event
-        TokensClaimed(investor, depositedTokenValue);
-    }
 
     // @dev investors can claim tokens by calling the function
     // @param tokenToClaimAmount - amount of the token to claim
@@ -263,7 +244,6 @@ contract RefundVault is Claimable {
         // BK Ok
         claimTokens(depositedTokenValue);
     }
-
 
 }
 
