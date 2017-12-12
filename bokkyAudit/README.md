@@ -15,7 +15,7 @@ Commits
 
 * The token contract is built to fit into the Bancor smart contracts, and as such have the following functions defined:
   `disableTransfers(...)`, `issue(...)` and `destroy()`. The token contract owner can use these functios to disable the transfer
-  of tokens, mint new tokens and burn any account's tokens
+  of tokens, mint new tokens and burn any account's tokens. These functions are implemented in *LimitedTransferBancorSmartToken*
 
 <br />
 
@@ -71,8 +71,8 @@ Commits
 
 * [x] [code-review/ISmartToken.md](code-review/ISmartToken.md)
   * [x] contract ISmartToken
-* [ ] [code-review/LimitedTransferBancorSmartToken.md](code-review/LimitedTransferBancorSmartToken.md)
-  * [ ] contract LimitedTransferBancorSmartToken is MintableToken, ISmartToken, LimitedTransferToken
+* [x] [code-review/LimitedTransferBancorSmartToken.md](code-review/LimitedTransferBancorSmartToken.md)
+  * [x] contract LimitedTransferBancorSmartToken is MintableToken, ISmartToken, LimitedTransferToken
 
 ### contracts/crowdsale
 
@@ -86,12 +86,12 @@ Commits
 
 ### contracts/token
 
+* [x] [code-review/ERC20Basic.md](code-review/ERC20Basic.md)
+  * [x] contract ERC20Basic
+* [x] [code-review/ERC20.md](code-review/ERC20.md)
+  * [x] contract ERC20 is ERC20Basic
 * [ ] [code-review/BasicToken.md](code-review/BasicToken.md)
   * [ ] contract BasicToken is ERC20Basic
-* [ ] [code-review/ERC20.md](code-review/ERC20.md)
-  * [ ] contract ERC20 is ERC20Basic
-* [ ] [code-review/ERC20Basic.md](code-review/ERC20Basic.md)
-  * [ ] contract ERC20Basic
 * [ ] [code-review/LimitedTransferToken.md](code-review/LimitedTransferToken.md)
   * [ ] contract LimitedTransferToken is ERC20
 * [ ] [code-review/MintableToken.md](code-review/MintableToken.md)

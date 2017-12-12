@@ -104,8 +104,11 @@ contract LimitedTransferBancorSmartToken is MintableToken, ISmartToken, LimitedT
     // @time - not used (framework unneeded functionality)
     //
     // @Override
+    // BK Ok
     function transferableTokens(address holder, uint64 time) public constant returns (uint256) {
+        // BK Ok
         require(transfersEnabled);
+        // BK Ok
         return super.transferableTokens(holder, time);
     }
 }

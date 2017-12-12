@@ -179,6 +179,7 @@ contract RefundVault is Claimable {
         uint256 depositedTokenValue = depositedToken[investor];
         require(depositedTokenValue > 0);
         
+        depositedToken[investor] = 0;
 
         token.transfer(investor, depositedTokenValue);
         
