@@ -76,8 +76,8 @@ Commits
 
 ### contracts/crowdsale
 
-* [ ] [code-review/Crowdsale.md](code-review/Crowdsale.md)
-  * [ ] contract Crowdsale
+* [x] [code-review/Crowdsale.md](code-review/Crowdsale.md)
+  * [x] contract Crowdsale
 * [ ] [code-review/FinalizableCrowdsale.md](code-review/FinalizableCrowdsale.md)
   * [ ] contract FinalizableCrowdsale is Crowdsale, Claimable
 * [x] [code-review/RefundVault.md](code-review/RefundVault.md)
@@ -90,14 +90,14 @@ Commits
   * [x] contract ERC20Basic
 * [x] [code-review/ERC20.md](code-review/ERC20.md)
   * [x] contract ERC20 is ERC20Basic
-* [ ] [code-review/BasicToken.md](code-review/BasicToken.md)
-  * [ ] contract BasicToken is ERC20Basic
-* [ ] [code-review/LimitedTransferToken.md](code-review/LimitedTransferToken.md)
-  * [ ] contract LimitedTransferToken is ERC20
-* [ ] [code-review/MintableToken.md](code-review/MintableToken.md)
-  * [ ] contract MintableToken is StandardToken, Claimable
-* [ ] [code-review/StandardToken.md](code-review/StandardToken.md)
-  * [ ] contract StandardToken is ERC20, BasicToken
+* [x] [code-review/BasicToken.md](code-review/BasicToken.md)
+  * [x] contract BasicToken is ERC20Basic
+* [x] [code-review/LimitedTransferToken.md](code-review/LimitedTransferToken.md)
+  * [x] contract LimitedTransferToken is ERC20
+* [x] [code-review/StandardToken.md](code-review/StandardToken.md)
+  * [x] contract StandardToken is ERC20, BasicToken
+* [x] [code-review/MintableToken.md](code-review/MintableToken.md)
+  * [x] contract MintableToken is StandardToken, Claimable
 
 ### contracts
 

@@ -7,6 +7,7 @@ Source file [../../../contracts/token/ERC20Basic.sol](../../../contracts/token/E
 <hr />
 
 ```javascript
+// BK Ok
 pragma solidity ^0.4.18;
 
 
@@ -15,10 +16,13 @@ pragma solidity ^0.4.18;
  * @dev Simpler version of ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/179
  */
+// BK Ok
 contract ERC20Basic {
+  // BK Next 3 Ok
   uint256 public totalSupply;
   function balanceOf(address who) public view returns (uint256);
   function transfer(address to, uint256 value) public returns (bool);
+  // BK Ok - Event
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
 
