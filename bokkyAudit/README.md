@@ -14,7 +14,7 @@ Commits
 ### Note
 
 * The token contract is built to fit into the Bancor smart contracts, and as such have the following functions defined:
-  `disableTransfers(...)`, `issue(...)` and `destroy()`. The token contract owner can theoretically disable the transfer
+  `disableTransfers(...)`, `issue(...)` and `destroy()`. The token contract owner can use these functios to disable the transfer
   of tokens, mint new tokens and burn any account's tokens
 
 <br />
@@ -39,6 +39,9 @@ Commits
 <hr />
 
 ## Recommendations
+
+* **MEDIUM IMPORTANCE** There is a problem with `RefundVault.claimAllInvestorTokensByOwner(...)` not recording the
+  tokens being claimed no behalf of an investor.
 
 <br />
 
@@ -77,8 +80,9 @@ Commits
   * [ ] contract Crowdsale
 * [ ] [code-review/FinalizableCrowdsale.md](code-review/FinalizableCrowdsale.md)
   * [ ] contract FinalizableCrowdsale is Crowdsale, Claimable
-* [ ] [code-review/RefundVault.md](code-review/RefundVault.md)
-  * [ ] contract RefundVault is Claimable
+* [x] [code-review/RefundVault.md](code-review/RefundVault.md)
+  * [x] contract RefundVault is Claimable
+  * [ ] NOTE there is an outstanding bug that will need to be fixed
 
 ### contracts/token
 
