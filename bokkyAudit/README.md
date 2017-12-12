@@ -78,8 +78,8 @@ Commits
 
 * [x] [code-review/Crowdsale.md](code-review/Crowdsale.md)
   * [x] contract Crowdsale
-* [ ] [code-review/FinalizableCrowdsale.md](code-review/FinalizableCrowdsale.md)
-  * [ ] contract FinalizableCrowdsale is Crowdsale, Claimable
+* [x] [code-review/FinalizableCrowdsale.md](code-review/FinalizableCrowdsale.md)
+  * [x] contract FinalizableCrowdsale is Crowdsale, Claimable
 * [x] [code-review/RefundVault.md](code-review/RefundVault.md)
   * [x] contract RefundVault is Claimable
   * [ ] NOTE there is an outstanding bug that will need to be fixed
@@ -103,8 +103,8 @@ Commits
 
 * [ ] [code-review/SirinCrowdsale.md](code-review/SirinCrowdsale.md)
   * [ ] contract SirinCrowdsale is FinalizableCrowdsale
-* [ ] [code-review/SirinSmartToken.md](code-review/SirinSmartToken.md)
-  * [ ] contract SirinSmartToken is LimitedTransferBancorSmartToken
+* [x] [code-review/SirinSmartToken.md](code-review/SirinSmartToken.md)
+  * [x] contract SirinSmartToken is LimitedTransferBancorSmartToken
 
 The following is outside the scope of this review, but will be checked against existing multisig wallet source code:
 
